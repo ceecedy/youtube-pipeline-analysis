@@ -1,0 +1,250 @@
+version: 2
+
+models:
+  - name: staging_category
+    description: "Staging table for YouTube category data"
+    columns:
+      - name: category_id
+        description: "Number code for the category"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+      
+      - name: category_name
+        description: "Name of the category"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING" 
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1
+              max_value: 100  
+
+      - name: category_description
+        description: "Description of the category"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0
+              max_value: 500  
+  
+  - name: staging_channel
+    description: "Staging table for YouTube channel data"
+    columns:
+      - name: channel_id
+        description: "Unique identifier for the YouTube channel"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"
+
+      - name: channel_title
+        description: "Title of the YouTube channel"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1
+              max_value: 255  
+
+      - name: channel_description
+        description: "Description of the YouTube channel"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0  
+              max_value: 1000  
+
+      - name: channel_published_at
+        description: "The date and time when the channel was published"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "TIMESTAMP"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "TIMESTAMP('1900-01-01 00:00:00')"  
+              max_value: "TIMESTAMP('2100-12-31 23:59:59')" 
+
+  - name: staging_region
+    description: "Staging table for YouTube region data"
+    columns:
+      - name: region_code
+        description: "Code representing the region"
+        data_tests:
+          - not_null  
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['PH', 'US']  
+
+      - name: region_name
+        description: "Name of the region"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1  
+              max_value: 255  
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['Philippines', 'United States', 'Unknown']  
+  
+  - name: staging_video_comments
+    description: "Staging table for YouTube video comment data"
+    columns:
+      - name: comment_id
+        description: "Unique identifier for the comment"
+        data_tests:
+          - not_null 
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: video_id
+        description: "ID of the video the comment belongs to"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: comment_author
+        description: "The author of the comment"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: comment_text
+        description: "The text of the comment"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1
+
+      - name: like_count
+        description: "The number of likes on the comment"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0 
+              max_value: 1000000  # Arbitrary maximum limit 
+
+      - name: published_at
+        description: "Timestamp when the comment was published"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "TIMESTAMP"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "TIMESTAMP('1900-01-01 00:00:00')"  
+              max_value: "TIMESTAMP('2100-12-31 23:59:59')" 
+  
+  - name: staging_video_metrics
+    description: "Staging table for YouTube video metrics data"
+    columns:
+      - name: video_id
+        description: "ID of the video"
+        data_tests:
+          - not_null  
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: region_code
+        description: "Region code where the video was created"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: view_count
+        description: "Number of views for the video"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0  
+              max_value: 1000000000  # Arbitrary maximum limit
+
+      - name: like_count
+        description: "Number of likes for the video"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0  
+              max_value: 1000000000  # Arbitrary maximum limit
+
+      - name: comment_count
+        description: "Number of comments for the video"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0  
+              max_value: 1000000000  # Arbitrary maximum limit
+
+      - name: published_at
+        description: "Timestamp when the video metrics were recorded"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "TIMESTAMP"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "TIMESTAMP('1900-01-01 00:00:00')"  
+              max_value: "TIMESTAMP('2100-12-31 23:59:59')"  
+
+  - name: staging_video
+    description: "Staging table for YouTube video data"
+    columns:
+      - name: video_id
+        description: "Unique identifier for the video"
+        data_tests:
+          - not_null  
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: title
+        description: "Title of the YouTube video"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1  
+              max_value: 255  
+
+      - name: description
+        description: "Description of the YouTube video"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0  
+
+      - name: channel_id
+        description: "ID of the channel that uploaded the video"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: category_id
+        description: "ID of the category the video belongs to"
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          
+      - name: published_at
+        description: "Timestamp when the video was published"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "TIMESTAMP"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "TIMESTAMP('1900-01-01 00:00:00')"  
+              max_value: "TIMESTAMP('2100-12-31 23:59:59')"
+

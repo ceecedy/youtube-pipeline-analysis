@@ -1,0 +1,269 @@
+version: 2
+
+models:
+  - name: dim_categories
+    description: "Dimension table for YouTube video categories."
+    columns:
+      - name: pk_category_id
+        description: "Primary key for the category dimension table."
+        data_tests:
+          - not_null 
+          - unique  
+
+      - name: category_id
+        description: "Number code for the category."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+
+      - name: category_name
+        description: "Name of the YouTube category."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1  
+              max_value: 255  
+
+      - name: category_description
+        description: "Description of the YouTube category."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0  
+              max_value: 500
+
+  - name: dim_channels
+    description: "Dimension table for YouTube channel data with cleaned and filled fields."
+    columns:
+      - name: pk_channel_id
+        description: "Primary key for the channel dimension table."
+        data_tests:
+          - not_null 
+          - unique 
+
+      - name: channel_id
+        description: "Unique identifier for the YouTube channel."
+        data_tests:
+          - not_null 
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: channel_title
+        description: "The title of the YouTube channel."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1  
+              max_value: 255  
+
+      - name: channel_description
+        description: "The description of the YouTube channel."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0  
+              max_value: 1000  
+
+      - name: channel_published_at
+        description: "The timestamp when the channel was published."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "TIMESTAMP"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "TIMESTAMP('1900-01-01 00:00:00')"  
+              max_value: "TIMESTAMP('2100-12-31 23:59:59')" 
+
+  - name: dim_regions
+    description: "Dimension table for YouTube regions."
+    columns:
+      - name: region_code
+        description: "Unique identifier for the region."
+        data_tests:
+          - not_null 
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 2  
+              max_value: 5  
+
+      - name: region_name
+        description: "Full name of the region."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1  
+              max_value: 100  
+  
+  - name: dim_videos
+    description: "Dimension table for YouTube video data with cleaned and filled fields."
+    columns:
+      - name: video_id
+        description: "Unique identifier for the YouTube video."
+        data_tests:
+          - not_null  
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: title
+        description: "The title of the YouTube video."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1  
+              max_value: 255  
+
+      - name: description
+        description: "The description of the YouTube video."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0  
+
+      - name: channel_id
+        description: "The ID of the YouTube channel that uploaded the video."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: category_id
+        description: "The ID of the category to which the video belongs."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"
+
+  - name: fact_video_comments
+    description: "Fact table for YouTube video comments, including the comment text, like count, and publication timestamp."
+    columns:
+      - name: fact_comment_id
+        description: "Unique identifier for each fact record (generated using ROW_NUMBER)."
+        data_tests:
+          - not_null  
+          - unique  
+          
+      - name: comment_id
+        description: "Unique identifier for the comment."
+        data_tests:
+          - not_null  
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: video_id
+        description: "The ID of the YouTube video associated with the comment."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING" 
+
+      - name: comment_author
+        description: "The author of the YouTube comment."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0  
+              max_value: 255  
+
+      - name: comment_text
+        description: "The text content of the comment."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 0
+
+      - name: like_count
+        description: "The number of likes for the comment."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+
+      - name: published_at
+        description: "The timestamp when the comment was published."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "TIMESTAMP"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "TIMESTAMP('1900-01-01 00:00:00')"  
+              max_value: "TIMESTAMP('2100-12-31 23:59:59')"  
+  
+  - name: fact_video_metrics
+    description: "Fact table for YouTube video metrics, including view count, like count, comment count, and publication timestamp by region."
+    columns:
+      - name: fact_video_id
+        description: "Unique identifier for each fact record."
+        data_tests:
+          - not_null 
+          - unique  
+          
+      - name: video_id
+        description: "The ID of the YouTube video associated with the metrics."
+        data_tests:
+          - not_null  
+          - unique  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING"  
+
+      - name: region_code
+        description: "The region code for the YouTube video metrics."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "STRING" 
+
+      - name: view_count
+        description: "The number of views for the video."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          - dbt_expectations.expect_column_distinct_count_to_be_greater_than:
+              value: 0  
+
+      - name: like_count
+        description: "The number of likes for the video."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          - dbt_expectations.expect_column_distinct_count_to_be_greater_than:
+              value: 0 
+
+      - name: comment_count
+        description: "The number of comments for the video."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "INT64"  
+          - dbt_expectations.expect_column_distinct_count_to_be_greater_than:
+              value: 0  
+
+      - name: published_at
+        description: "The timestamp when the video metrics were published."
+        data_tests:
+          - not_null  
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: "TIMESTAMP"  
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "TIMESTAMP('1900-01-01 00:00:00')"  
+              max_value: "TIMESTAMP('2100-12-31 23:59:59')"  

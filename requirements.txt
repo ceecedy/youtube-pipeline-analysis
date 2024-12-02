@@ -1,0 +1,9 @@
+# Astro Runtime includes the following pre-installed providers packages: https://www.astronomer.io/docs/astro/runtime-image-architecture#provider-packages
+protobuf
+astronomer-cosmos[dbt-bigquery]  # install google + cosmos + dbt
+google-cloud-storage
+google-auth
+apache-airflow-providers-google
+pandas
+oauth2client<4.0.0  # required for extracting the data (if needed)
+

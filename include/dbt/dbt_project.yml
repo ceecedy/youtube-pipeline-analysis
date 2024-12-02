@@ -1,0 +1,67 @@
+name: 'youtube_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'youtube'
+
+model-paths: ['models']
+target-path: 'target'
+clean-targets:
+  - 'target'
+  - 'dbt_modules'
+
+models:
+  youtube_project:
+    youtube_data:
+      staging:
+        staging_category:
+          +materialized: 'view'
+
+        staging_channel:
+          +materialized: 'view'
+
+        staging_region:
+          +materialized: 'view'
+
+        staging_video_comments:
+          +materialized: 'view'
+
+        staging_video_metrics:
+          +materialized: 'view'
+
+        staging_video:
+          +materialized: 'view'
+
+      # Marts models configuration (dim and fact tables)
+      marts:
+        # Dimension tables: Materialized as tables with clustering
+        dim_videos:
+          +materialized: 'table'  # Dim tables as physical tables
+          +cluster_by: ['video_id']  # Cluster by video_id if frequently queried on it
+
+        dim_channels:
+          +materialized: 'table'
+          +cluster_by: ['channel_id']  # Cluster by channel_id if frequently queried on it
+
+        dim_categories:
+          +materialized: 'table'
+
+        dim_regions:
+          +materialized: 'table'
+
+        # Fact tables: Materialized as incremental with partitioning and merge strategy
+        fact_video_metrics:
+          +materialized: 'incremental'
+          +incremental_strategy: 'merge'  # Merge strategy for incremental models
+          +unique_key: 'fact_video_id'  # Unique identifier for incremental updates
+          +partition_by:
+            field: 'published_at'
+            data_type: 'timestamp'
+
+        fact_video_comments:
+          +materialized: 'incremental'
+          +incremental_strategy: 'merge'
+          +unique_key: 'fact_comment_id'
+          +partition_by:
+            field: 'published_at'  # Partition by timestamp field if necessary
+            data_type: 'timestamp'  # Ensure correct data type for partitioning

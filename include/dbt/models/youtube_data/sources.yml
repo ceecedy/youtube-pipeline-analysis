@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: youtube
+    database: yt-e2e-data-cycle-project
+    tables:
+      - name: raw_youtube_comment_data    
+      - name: raw_youtube_video_data
