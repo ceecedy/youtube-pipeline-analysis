@@ -15,7 +15,7 @@ dbt_instructions.txt
 include/dbt/dbt_packages/
 include/dbt/logs/
 include/dbt/target/
+include/dbt/*.yml
 include/dbt/package_lock.yml
-include/dbt/package_lock.yml
-include/dbt/profiles.yml
-include/dbt/user.yml
+include/dbt/package-lock.yml
+include/dbt/.user.yml
