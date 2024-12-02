@@ -100,7 +100,7 @@ The data model consists of the following tables, categorized into dimensions and
 ### ELT Diagram
 ![](demo/youtube_elt_diagram.png)
 
-This ELT pipeline is designed to run on weekly basis.
+This ELT pipeline is designed to run on weekly basis. This Data orchestration was done using Astronomer-Airflow.
 
 ### Extraction and Loading Diagram
 ![](demo/extraction_dag.png)
