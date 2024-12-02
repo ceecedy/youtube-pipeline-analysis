@@ -12,9 +12,9 @@ airflow.db
 include/gcp
 astro_running_instructions.md
 dbt_instructions.txt
-include/dbt/dbt_packages
-include/dbt/logs
-include/dbt/target
+include/dbt/dbt_packages/
+include/dbt/logs/
+include/dbt/target/
 include/dbt/package_lock.yml
 include/dbt/package_lock.yml
 include/dbt/profiles.yml
