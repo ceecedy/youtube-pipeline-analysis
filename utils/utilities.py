@@ -4,6 +4,7 @@ import glob
 import json
 import pandas as pd
 from google.cloud import storage
+from google.cloud import bigquery
 
 
 # Function to get the most recent JSON file from the directory
@@ -77,3 +78,17 @@ def get_most_recent_file_from_gcs(**kwargs):
     
     return most_recent_video_file, most_recent_comment_file
 
+# Function to check if the dataset exists and create it if not
+def check_and_create_bigquery_dataset(dataset_id: str, gcp_conn_id: str = 'youtube-gcp-etl'):
+    client = bigquery.Client(project=gcp_conn_id)  # Initialize BigQuery client using the GCP connection ID
+
+    try:
+        # Try to get the dataset
+        client.get_dataset(dataset_id)  # If the dataset exists, this will succeed
+        print(f"Dataset {dataset_id} already exists.")
+    except bigquery.exceptions.NotFound:
+        # If the dataset doesn't exist, create it
+        print(f"Dataset {dataset_id} does not exist. Creating dataset...")
+        dataset = bigquery.Dataset(dataset_id)
+        client.create_dataset(dataset)  # Create the dataset
+        print(f"Dataset {dataset_id} created successfully.")

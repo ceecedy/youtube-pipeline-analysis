@@ -86,11 +86,11 @@ with DAG('extract_trending_youtube_videos_weekly',
         provide_context=True,
     )
     
-    # Create schema for BigQuery 
-    create_youtube_dataset = BigQueryCreateEmptyDatasetOperator(
-        task_id = 'create_youtube_dataset',
-        dataset_id = 'youtube',
-        gcp_conn_id = 'youtube-gcp-etl',
+    # Task to check if dataset exists and create if not
+    check_and_create_youtube_dataset = PythonOperator(
+        task_id='check_and_create_youtube_dataset',
+        python_callable=check_and_create_bigquery_dataset,
+        op_kwargs={'dataset_id': 'youtube', 'gcp_conn_id': 'youtube-gcp-etl'},
     )
     
     # Task to list the most recent file in GCS (from the GCS bucket)
@@ -152,4 +152,4 @@ with DAG('extract_trending_youtube_videos_weekly',
     )
 
     # Set task dependencies
-    extract_task >> upload_task >> create_youtube_dataset >> get_most_recent_file_gcs >> load_data_to_bq
+    extract_task >> upload_task >> check_and_create_youtube_dataset >> get_most_recent_file_gcs >> load_data_to_bq
