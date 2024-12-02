@@ -29,7 +29,6 @@ The project utilizes modern data engineering tools and workflows, integrating te
 ## Data Model  
 ![](demo/youtube_analytics_pipeline.png)
 
-## Data Model  
 The data model consists of the following tables, categorized into dimensions and facts, along with their relationships:
 
 ### Dimension Tables:
