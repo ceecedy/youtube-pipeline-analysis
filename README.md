@@ -125,7 +125,7 @@ The data model consists of the following tables, categorized into dimensions and
 The **YouTube Analytics Dashboard** includes:  
 - **Video Performance Trends**: Visualize weekly changes in views, likes, and comments.  
 - **Audience Engagement**: Analyze top-performing videos and comments by region and category.  
-![Video Not available at the moment. It will load soon.](demo/youtube-video-dashboard.mp4)
+- ![Video Not available at the moment. You can click this text and click "view raw" to download the video on the path you will be relocated.](demo/youtube-video-dashboard.mp4)
 
 ---
 
