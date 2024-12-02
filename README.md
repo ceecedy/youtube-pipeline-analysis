@@ -124,8 +124,14 @@ This ELT pipeline is designed to run on weekly basis. This Data orchestration wa
 
 ## Dashboard Highlights  
 The **YouTube Analytics Dashboard** includes:  
-- **Video Performance Trends**: Visualize weekly changes in views, likes, and comments.  
-- **Audience Engagement**: Analyze top-performing videos and comments by region and category.  
+- **Top Videos by Views**: Displays the top 10 most viewed videos for the US and PH, with metrics such as views, likes, and comments. A horizontal bar chart differentiates regional trends.
+- **Engagement Comparison**: Compares likes and comments between US and PH regions using stacked bar charts for clear insights.
+- **Category Engagement**: Highlights top-performing categories like Music and Gaming for both regions with clustered bar charts.
+- **Weekly Video Trends**: Analyzes engagement trends (views, likes, comments) over the week using line graphs for top videos.
+- **Most Liked Comments**: Showcases highly liked comments for regional top videos in a sortable table with a heat map for visual emphasis.
+- **Regional Performance**: Summarizes overall metrics (views, likes, comments) with pie charts to compare US and PH performance.
+- **New Video Insights**: Evaluates the performance of new videos using bubble charts to visualize views, likes, and comments for both regions.
+- **Publish Time Impact**: Explores how video publish timing influences engagement with scatter plots highlighting regional patterns.
 ![Video Not available at the moment. You can click this text and click "view raw" to download the video on the path you will be relocated.](demo/youtube-video-dashboard.mp4)
 
 ---
