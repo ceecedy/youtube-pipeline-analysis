@@ -106,7 +106,7 @@ This ELT pipeline is designed to run on weekly basis. This Data orchestration wa
 ![](demo/extraction_dag.png)
 - **extract_and_save_to_local**: A task that is responsible for executing a python script that will request data from youtube api.
 - **upload_files_to_gcs**: A task that will upload the extracted data to GCS bucket as ".ndjson".
-- **check_and_create_youtube_dataset **: A task that will create an empty dataset in Google Big Query if not yet created. 
+- **check_and_create_youtube_dataset**: A task that will create an empty dataset in Google Big Query if not yet created. 
 - **get_most_recent_file**: A task that will get the specific youtube data most recent file. 
 - **load_data_to_bq**: A task that will load the latest youtube data in GCS to Big Query. 
 
