@@ -100,6 +100,8 @@ The data model consists of the following tables, categorized into dimensions and
 ### ELT Diagram
 ![](demo/youtube_elt_diagram.png)
 
+This ELT pipeline is designed to run on weekly basis.
+
 ### Extraction and Loading Diagram
 ![](demo/extraction_dag.png)
 - **extract_and_save_to_local**: A task that is responsible for executing a python script that will request data from youtube api.
