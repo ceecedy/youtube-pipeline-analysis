@@ -17,7 +17,7 @@ The project utilizes modern data engineering tools and workflows, integrating te
 ---
 
 ## Data Model  
-_TBD_
+![](demo/youtube_analytics_pipeline.png)
 
 ---
 
@@ -27,7 +27,7 @@ _DAG_
 ---
 
 ## Tech Stack  
-- **Programming Language**: Python  
+- **Programming Language**: Python, SQL 
 - **Data Orchestration**: Apache Airflow  
 - **Data Transformation**: dbt  
 - **Data Storage**: Google Cloud Storage, BigQuery  
@@ -40,7 +40,6 @@ _DAG_
 The **YouTube Analytics Dashboard** includes:  
 - **Video Performance Trends**: Visualize weekly changes in views, likes, and comments.  
 - **Audience Engagement**: Analyze top-performing videos and comments by region and category.  
-- **Channel Insights**: Discover channel-level statistics, including channel growth and engagement.  
 
 ---
 
